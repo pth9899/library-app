@@ -1,0 +1,83 @@
+<html>
+<head>
+<title>UserController.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+UserController.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">group</span><span class="s2">.</span><span class="s1">libraryapp</span><span class="s2">.</span><span class="s1">controller</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">group</span><span class="s2">.</span><span class="s1">libraryapp</span><span class="s2">.</span><span class="s1">domain</span><span class="s2">.</span><span class="s1">user</span><span class="s2">.</span><span class="s1">User</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">group</span><span class="s2">.</span><span class="s1">libraryapp</span><span class="s2">.</span><span class="s1">dto</span><span class="s2">.</span><span class="s1">user</span><span class="s2">.</span><span class="s1">UserCreateRequest</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">group</span><span class="s2">.</span><span class="s1">libraryapp</span><span class="s2">.</span><span class="s1">dto</span><span class="s2">.</span><span class="s1">user</span><span class="s2">.</span><span class="s1">UserUpdateRequest</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">group</span><span class="s2">.</span><span class="s1">libraryapp</span><span class="s2">.</span><span class="s1">dto</span><span class="s2">.</span><span class="s1">user</span><span class="s2">.</span><span class="s1">response</span><span class="s2">.</span><span class="s1">UserResponse</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">jdbc</span><span class="s2">.</span><span class="s1">core</span><span class="s2">.</span><span class="s1">JdbcTemplate</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">jdbc</span><span class="s2">.</span><span class="s1">core</span><span class="s2">.</span><span class="s1">RowMapper</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">web</span><span class="s2">.</span><span class="s1">bind</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.*;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">sql</span><span class="s2">.</span><span class="s1">ResultSet</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">sql</span><span class="s2">.</span><span class="s1">SQLException</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">ArrayList</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+<span class="s1">@RestController</span>
+<span class="s0">public class </span><span class="s1">UserController </span><span class="s2">{</span>
+    <span class="s0">private final </span><span class="s1">JdbcTemplate jdbcTemplate</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">UserController</span><span class="s2">(</span><span class="s1">JdbcTemplate jdbcTemplate</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">jdbcTemplate </span><span class="s2">= </span><span class="s1">jdbcTemplate</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@PostMapping</span><span class="s2">(</span><span class="s3">&quot;/user&quot;</span><span class="s2">)</span>
+    <span class="s0">public void </span><span class="s1">saveUser</span><span class="s2">(</span><span class="s1">@RequestBody UserCreateRequest request</span><span class="s2">) {</span>
+        <span class="s1">String sql </span><span class="s2">= </span><span class="s3">&quot;INSERT INTO user(name, age) VALUES(?, ?)&quot;</span><span class="s2">;</span>
+        <span class="s1">jdbcTemplate</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">sql</span><span class="s2">, </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getName</span><span class="s2">(), </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getAge</span><span class="s2">());</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s3">&quot;/user&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">UserResponse</span><span class="s2">&gt; </span><span class="s1">getUsers</span><span class="s2">() {</span>
+        <span class="s1">String sql </span><span class="s2">= </span><span class="s3">&quot;SELECT * FROM user&quot;</span><span class="s2">;</span>
+        <span class="s0">return </span><span class="s1">jdbcTemplate</span><span class="s2">.</span><span class="s1">query</span><span class="s2">(</span><span class="s1">sql</span><span class="s2">, </span><span class="s0">new </span><span class="s1">RowMapper</span><span class="s2">&lt;</span><span class="s1">UserResponse</span><span class="s2">&gt;() {</span>
+            <span class="s1">@Override</span>
+            <span class="s0">public </span><span class="s1">UserResponse mapRow</span><span class="s2">(</span><span class="s1">ResultSet rs</span><span class="s2">, </span><span class="s0">int </span><span class="s1">rowNum</span><span class="s2">) </span><span class="s0">throws </span><span class="s1">SQLException </span><span class="s2">{</span>
+                <span class="s0">long </span><span class="s1">id </span><span class="s2">= </span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getLong</span><span class="s2">(</span><span class="s3">&quot;id&quot;</span><span class="s2">);</span>
+                <span class="s1">String name </span><span class="s2">= </span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getString</span><span class="s2">(</span><span class="s3">&quot;name&quot;</span><span class="s2">);</span>
+                <span class="s0">int </span><span class="s1">age </span><span class="s2">= </span><span class="s1">rs</span><span class="s2">.</span><span class="s1">getInt</span><span class="s2">(</span><span class="s3">&quot;age&quot;</span><span class="s2">);</span>
+                <span class="s0">return new </span><span class="s1">UserResponse</span><span class="s2">(</span><span class="s1">id</span><span class="s2">, </span><span class="s1">name</span><span class="s2">, </span><span class="s1">age</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">});</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@PutMapping</span><span class="s2">(</span><span class="s3">&quot;/user&quot;</span><span class="s2">)</span>
+    <span class="s0">public void </span><span class="s1">updateUser</span><span class="s2">(</span><span class="s1">@RequestBody UserUpdateRequest request</span><span class="s2">){</span>
+        <span class="s1">String readSql </span><span class="s2">= </span><span class="s3">&quot;SELECT * FROM user where id = ?&quot;</span><span class="s2">;</span>
+        <span class="s0">boolean </span><span class="s1">isUserNotExist </span><span class="s2">= </span><span class="s1">jdbcTemplate</span><span class="s2">.</span><span class="s1">query</span><span class="s2">(</span><span class="s1">readSql</span><span class="s2">, (</span><span class="s1">rs</span><span class="s2">,</span><span class="s1">rowNum</span><span class="s2">) </span><span class="s1">-&gt;</span><span class="s4">0</span><span class="s2">, </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">()).</span><span class="s1">isEmpty</span><span class="s2">();</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">isUserNotExist</span><span class="s2">){</span>
+            <span class="s0">throw new </span><span class="s1">IllegalArgumentException</span><span class="s2">();</span>
+        <span class="s2">}</span>
+        <span class="s1">String updateSql </span><span class="s2">= </span><span class="s3">&quot;UPDATE user SET name = ? WHERE id = ?&quot;</span><span class="s2">;</span>
+        <span class="s1">jdbcTemplate</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">updateSql</span><span class="s2">, </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getName</span><span class="s2">(), </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">());</span>
+    <span class="s2">}</span>
+    <span class="s1">@DeleteMapping</span><span class="s2">(</span><span class="s3">&quot;/user&quot;</span><span class="s2">)</span>
+    <span class="s0">public void </span><span class="s1">deleteUser</span><span class="s2">(</span><span class="s1">@RequestParam String name</span><span class="s2">){</span>
+        <span class="s1">String readSql </span><span class="s2">= </span><span class="s3">&quot;SELECT * FROM user WHERE name =?&quot;</span><span class="s2">;</span>
+        <span class="s0">boolean </span><span class="s1">isUserNotExist </span><span class="s2">= </span><span class="s1">jdbcTemplate</span><span class="s2">.</span><span class="s1">query</span><span class="s2">(</span><span class="s1">readSql</span><span class="s2">, (</span><span class="s1">rs</span><span class="s2">, </span><span class="s1">rowNum</span><span class="s2">) </span><span class="s1">-&gt; </span><span class="s4">0</span><span class="s2">, </span><span class="s1">name</span><span class="s2">).</span><span class="s1">isEmpty</span><span class="s2">();</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">isUserNotExist</span><span class="s2">){</span>
+            <span class="s0">throw new </span><span class="s1">IllegalArgumentException</span><span class="s2">();</span>
+        <span class="s2">}</span>
+        <span class="s1">String deleteSql </span><span class="s2">= </span><span class="s3">&quot;DELETE FROM user WHERE name = ?&quot;</span><span class="s2">;</span>
+        <span class="s1">jdbcTemplate</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">deleteSql</span><span class="s2">, </span><span class="s1">name</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>
